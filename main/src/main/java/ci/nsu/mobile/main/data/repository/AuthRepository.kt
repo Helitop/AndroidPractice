@@ -6,19 +6,18 @@ import ci.nsu.mobile.main.data.storage.TokenManager
 
 class AuthRepository(private val apiService: ApiService) {
 
-    suspend fun login(login: String, password: String): Result<UserDto> {
+    suspend fun login(login: String, password: String): Result<AuthResponseDto> {
         return try {
-            val response = apiService.login(LoginRequest(login, password))
-            response.token?.let {
-                TokenManager.token = it
-            }
+            val response = apiService.login(UserLoginRequestDto(login, password))
+            // Извлекаем токен из AuthResponseDto и сохраняем его
+            TokenManager.token = response.token
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    suspend fun register(registerRequest: RegisterRequest): Result<Unit> {
+    suspend fun register(registerRequest: RegistrationRequestDto): Result<Unit> {
         return try {
             apiService.register(registerRequest)
             Result.success(Unit)

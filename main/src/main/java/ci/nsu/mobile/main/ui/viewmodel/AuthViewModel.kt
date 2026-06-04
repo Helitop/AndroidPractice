@@ -3,10 +3,7 @@ package ci.nsu.mobile.main.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import ci.nsu.mobile.main.data.models.GroupDto
-import ci.nsu.mobile.main.data.models.PersonDto
-import ci.nsu.mobile.main.data.models.RegisterRequest
-import ci.nsu.mobile.main.data.models.UserDto
+import ci.nsu.mobile.main.data.models.*
 import ci.nsu.mobile.main.data.repository.AuthRepository
 import ci.nsu.mobile.main.data.storage.TokenManager
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,7 +52,6 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     val mainState = _mainState.asStateFlow()
 
     init {
-        // Если токен уже сохранен, сразу перенаправляем на главный экран
         if (!TokenManager.token.isNullOrEmpty()) {
             _currentScreen.value = AppScreen.Main
             loadUsers()
@@ -105,20 +101,20 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         middleName: String,
         birthDate: String,
         gender: String,
-        groupId: Int?,
+        groupId: Long?,
         loginVal: String,
         passwordVal: String,
         emailVal: String,
         phoneVal: String
     ) {
         if (firstName.isBlank() || lastName.isBlank() || loginVal.isBlank() || passwordVal.isBlank() || emailVal.isBlank() || phoneVal.isBlank() || groupId == null) {
-            _registerState.update { it.copy(error = "Пожалуйста, заполните все поля") }
+            _registerState.update { it.copy(error = "Пожалуйста, заполните все обязательные поля") }
             return
         }
 
         viewModelScope.launch {
             _registerState.update { it.copy(isLoading = true, error = null) }
-            val person = PersonDto(
+            val person = PersonInputDto(
                 firstName = firstName,
                 lastName = lastName,
                 middleName = middleName.ifBlank { null },
@@ -126,7 +122,7 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
                 gender = gender,
                 groupId = groupId
             )
-            val request = RegisterRequest(
+            val request = RegistrationRequestDto(
                 login = loginVal,
                 password = passwordVal,
                 email = emailVal,
@@ -155,7 +151,7 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
                     _mainState.update { it.copy(users = usersList, isLoading = false) }
                 }
                 .onFailure { error ->
-                    _mainState.update { it.copy(isLoading = false, error = "Ошибка: ${error.localizedMessage}") }
+                    _mainState.update { it.copy(isLoading = false, error = "Ошибка загрузки: ${error.localizedMessage}") }
                 }
         }
     }

@@ -63,7 +63,7 @@ fun MainScreen(
                         .padding(bottom = 16.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) {
-                    Text("Выйти из аккаунта")
+                    Text("Выйти")
                 }
 
                 if (state.users.isEmpty()) {
@@ -71,7 +71,7 @@ fun MainScreen(
                         modifier = Modifier.weight(1f).fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("Список пользователей пуст", style = MaterialTheme.typography.bodyLarge)
+                        Text("Список пуст", style = MaterialTheme.typography.bodyLarge)
                     }
                 } else {
                     LazyColumn(
@@ -87,6 +87,10 @@ fun MainScreen(
                                     modifier = Modifier.padding(16.dp)
                                 ) {
                                     Text(
+                                        text = "User ID: ${user.userId}",
+                                        style = MaterialTheme.typography.bodySmall
+                                    )
+                                    Text(
                                         text = "Логин: ${user.login}",
                                         style = MaterialTheme.typography.titleMedium
                                     )
@@ -94,16 +98,11 @@ fun MainScreen(
                                         Text(text = "Email: $it", style = MaterialTheme.typography.bodyMedium)
                                     }
                                     user.phoneNumber?.let {
-                                        Text(text = "Телефон: $it", style = MaterialTheme.typography.bodyMedium)
+                                        Text(text = "Тел: $it", style = MaterialTheme.typography.bodyMedium)
                                     }
-                                    user.person?.let { person ->
-                                        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                                    user.personId?.let { personId ->
                                         Text(
-                                            text = "ФИО: ${person.lastName} ${person.firstName} ${person.middleName ?: ""}",
-                                            style = MaterialTheme.typography.bodyMedium
-                                        )
-                                        Text(
-                                            text = "Дата рождения: ${person.birthDate}",
+                                            text = "ID Персоны: $personId",
                                             style = MaterialTheme.typography.bodySmall
                                         )
                                     }

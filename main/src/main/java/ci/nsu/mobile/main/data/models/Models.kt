@@ -5,45 +5,51 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GroupDto(
-    @SerialName("groupId")
-    val id: Int,
-    @SerialName("groupName")
-    val name: String
+    @SerialName("groupId") val groupId: Long,
+    @SerialName("groupName") val groupName: String
 )
 
 @Serializable
-data class PersonDto(
+data class PersonInputDto(
     @SerialName("firstName") val firstName: String,
     @SerialName("lastName") val lastName: String,
     @SerialName("middleName") val middleName: String? = null,
-    @SerialName("birthDate") val birthDate: String, // Формат ГГГГ-ММ-ДД
-    @SerialName("gender") val gender: String,      // MALE / FEMALE
-    @SerialName("groupId") val groupId: Int
+    @SerialName("birthDate") val birthDate: String, // format: "YYYY-MM-DD"
+    @SerialName("gender") val gender: String,
+    @SerialName("groupId") val groupId: Long
 )
 
 @Serializable
-data class RegisterRequest(
+data class RegistrationRequestDto(
     @SerialName("login") val login: String,
     @SerialName("password") val password: String,
     @SerialName("email") val email: String,
     @SerialName("phoneNumber") val phoneNumber: String,
-    @SerialName("roleId") val roleId: Int = 1,
+    @SerialName("roleId") val roleId: Long = 1,
     @SerialName("authAllowed") val authAllowed: Boolean = true,
-    @SerialName("person") val person: PersonDto
+    @SerialName("person") val person: PersonInputDto
 )
 
 @Serializable
-data class LoginRequest(
+data class UserLoginRequestDto(
     @SerialName("login") val login: String,
     @SerialName("password") val password: String
 )
 
 @Serializable
+data class AuthResponseDto(
+    @SerialName("token") val token: String
+)
+
+@Serializable
 data class UserDto(
-    @SerialName("id") val id: Int? = null,
+    @SerialName("userId") val userId: Long,
     @SerialName("login") val login: String,
     @SerialName("email") val email: String? = null,
     @SerialName("phoneNumber") val phoneNumber: String? = null,
-    @SerialName("token") val token: String? = null, // Токен, приходящий при авторизации
-    @SerialName("person") val person: PersonDto? = null
+    @SerialName("roleId") val roleId: Long? = null,
+    @SerialName("authAllowed") val authAllowed: Boolean? = null,
+    @SerialName("personId") val personId: Long? = null,
+    @SerialName("createdDate") val createdDate: String? = null,
+    @SerialName("lastLoginDate") val lastLoginDate: String? = null
 )

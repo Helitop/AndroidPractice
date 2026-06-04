@@ -7,10 +7,10 @@ import retrofit2.http.POST
 
 interface ApiService {
     @POST("auth/login")
-    suspend fun login(@Body request: LoginRequest): UserDto
+    suspend fun login(@Body request: UserLoginRequestDto): AuthResponseDto
 
     @POST("auth/register")
-    suspend fun register(@Body request: RegisterRequest)
+    suspend fun register(@Body request: RegistrationRequestDto)
 
     @GET("users")
     suspend fun getUsers(): List<UserDto>

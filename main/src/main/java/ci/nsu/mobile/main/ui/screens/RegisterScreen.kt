@@ -30,7 +30,7 @@ fun RegisterScreen(
     var middleName by rememberSaveable { mutableStateOf("") }
     var birthDate by rememberSaveable { mutableStateOf("2000-01-01") }
     var gender by rememberSaveable { mutableStateOf("MALE") }
-    var selectedGroupId by rememberSaveable { mutableStateOf<Int?>(null) }
+    var selectedGroupId by rememberSaveable { mutableStateOf<Long?>(null) }
     var selectedGroupName by rememberSaveable { mutableStateOf("") }
 
     var login by rememberSaveable { mutableStateOf("") }
@@ -132,7 +132,7 @@ fun RegisterScreen(
         }
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Выбор Группы (загруженной с сервера)
+        // Выбор Группы (динамически с сервера)
         Box(modifier = Modifier.fillMaxWidth()) {
             OutlinedTextField(
                 value = selectedGroupName.ifBlank { "Выберите группу *" },
@@ -165,10 +165,10 @@ fun RegisterScreen(
                 } else {
                     state.groups.forEach { group ->
                         DropdownMenuItem(
-                            text = { Text(group.name) },
+                            text = { Text(group.groupName) },
                             onClick = {
-                                selectedGroupId = group.id
-                                selectedGroupName = group.name
+                                selectedGroupId = group.groupId
+                                selectedGroupName = group.groupName
                                 expandedGroupDropdown = false
                             }
                         )

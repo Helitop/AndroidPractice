@@ -11,6 +11,7 @@ class AuthInterceptor : Interceptor {
 
         val token = TokenManager.token
         requestBuilder.addHeader("Content-Type", "application/json")
+        requestBuilder.addHeader("Connection", "close")
         token?.let {
             requestBuilder.addHeader("Authorization", "Bearer $it")
         }
